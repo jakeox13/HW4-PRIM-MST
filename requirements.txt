@@ -1,5 +1,5 @@
 pytest
 numpy
-heapq
+heapq > 3.5
 random
 scikit-learn
