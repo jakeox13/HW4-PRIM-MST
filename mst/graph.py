@@ -95,6 +95,5 @@ class Graph:
         
         # If inf remains then there is a disconnect
         if float("inf") in self.mst:
-            print("Not all nodes visited graph may be disconnected")
+            raise ValueError("Not all nodes visited graph may be disconnected")
             #Replace with zero(unconnected)
-            self.mst[self.mst == float("inf")] = 0

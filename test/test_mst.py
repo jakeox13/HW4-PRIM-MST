@@ -77,4 +77,11 @@ def test_mst_student():
     TODO: Write at least one unit test for MST construction.
     
     """
+
+    # Unit test where the graph is unconnected
+    file_path = './data/unconnected.csv'
+    g = Graph(file_path)
+    with pytest.raises(ValueError, match= r"Not all nodes visited graph may be disconnected"):
+        g.construct_mst()
+
     pass
