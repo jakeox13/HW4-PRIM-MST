@@ -1,5 +1,3 @@
 pytest
-numpy
-heapq > 3.5
-random
+numpy>=1.21.2
 scikit-learn
