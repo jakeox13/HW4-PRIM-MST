@@ -35,6 +35,12 @@ def check_mst(adj_mat: np.ndarray,
             total += mst[i, j]
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
 
+    # Check that the right number of edges are present (N-1) (over 2 since everything is in there twice)
+    assert np.count_nonzero(mst) /2 == mst.shape[0]-1, "Proposed MST has the wrong number of edges"
+
+    # Check that all nodes are connected (no rows should be all zeros)
+    assert not False in mst.any(axis=1), "Proposed MST is not fully connected"
+
 
 def test_mst_small():
     """

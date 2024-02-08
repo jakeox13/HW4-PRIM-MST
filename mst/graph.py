@@ -1,5 +1,6 @@
 import numpy as np
 import heapq
+import random
 from typing import Union
 
 class Graph:
@@ -41,4 +42,59 @@ class Graph:
         `heapify`, `heappop`, and `heappush` functions.
 
         """
-        self.mst = None
+        
+        
+        # Intilize mst to a numpy array of zeros
+        self.mst = np.zeros(np.shape(self.adj_mat))
+        
+        # Intiize to a random node
+        start=random.randint(0, np.shape(self.adj_mat)[0]-1)
+        # Create s and T
+        s=[start]
+        t=dict()
+        dist=dict()
+        prev=dict()
+        
+        # Set all starting distances to inf
+        for x in range(0,np.shape(self.adj_mat)[0]):
+            dist[x]=float("inf")
+            prev[x]=None
+        dist[start]=0
+        # Find intial distances to node
+        for x in range(0,np.shape(self.adj_mat)[0]):
+            if self.adj_mat[start,x] !=0:
+                dist[x]=self.adj_mat[start,x]
+                prev[x]=start
+        # Set up prority queue
+        pq=[]
+        for x in range(0,np.shape(self.adj_mat)[0]):
+            if x !=start:
+                heapq.heappush(pq, (dist[x],x))
+        
+        # While there are things in the queue
+        while pq:
+            # Pull the node of shortest distance
+            dist_val,u=heapq.heappop(pq)
+            # Check if value is in s
+            if u not in s:
+                # Add node to searched
+                s.append(u)
+                
+                # Add node to end graph
+                self.mst[prev[u],u]=dist_val
+                self.mst[u,prev[u]]=dist_val
+                
+                # Check if the distancace from new node to all nodes not in s are shorter than the current distance from s
+                for node in range(0,np.shape(self.adj_mat)[0]):
+                    if (node not in s) & (self.adj_mat[u,node] !=0) & (self.adj_mat[u,node] < dist[node]) :
+                        # Update the shortest distance value in the matrix
+                        dist[node]=self.adj_mat[u,node]
+                        # Note that edge orginates fromo the new node
+                        prev[node]=u
+                        heapq.heappush(pq, (dist[node],node))
+        
+        # If inf remains then there is a disconnect
+        if float("inf") in self.mst:
+            print("Not all nodes visited graph may be disconnected")
+            #Replace with zero(unconnected)
+            self.mst[self.mst == float("inf")] = 0
